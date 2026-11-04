@@ -1,6 +1,8 @@
-// Точка входа: подключение ресурсов и сборка страницы.
+// Точка входа: подключение ресурсов, сборка страницы и события.
 
 import { buildLayout } from './ui.js';
+import { addTask } from './store.js';
+import { initRender, render } from './render.js';
 
 function connectResources() {
   const styles = document.createElement('link');
@@ -16,4 +18,18 @@ function connectResources() {
 }
 
 connectResources();
-buildLayout();
+
+const ui = buildLayout();
+initRender(ui.list, ui.emptyMessage);
+
+ui.form.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const title = ui.titleInput.value.trim();
+  if (!title) return;
+  addTask(title, ui.dateInput.value);
+  ui.form.reset();
+  ui.titleInput.focus();
+  render();
+});
+
+render();
