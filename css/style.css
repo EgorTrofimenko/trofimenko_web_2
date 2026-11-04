@@ -1,0 +1,264 @@
+/* Стили страницы. Адаптивность построена на flex и grid. */
+
+:root {
+  --color-bg: #f3f5fa;
+  --color-surface: #ffffff;
+  --color-text: #1e2430;
+  --color-muted: #78809a;
+  --color-border: #dde2ee;
+  --color-accent: #3b6cf6;
+  --color-accent-dark: #2f57c9;
+  --color-danger: #d94f4f;
+  --color-done: #2f9e63;
+  --radius: 12px;
+  --shadow: 0 8px 20px rgba(30, 36, 48, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: "Segoe UI", system-ui, Arial, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.page-header,
+.page-main,
+.page-footer {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.page-header {
+  padding-top: 36px;
+  padding-bottom: 8px;
+}
+
+.page-header__title {
+  margin: 0;
+  font-size: 34px;
+}
+
+.page-header__subtitle {
+  margin: 6px 0 0;
+  color: var(--color-muted);
+}
+
+.page-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding-top: 18px;
+  padding-bottom: 30px;
+}
+
+
+.task-form {
+  display: grid;
+  grid-template-columns: 1fr 180px auto;
+  gap: 10px;
+}
+
+.task-form__input,
+.toolbar input,
+.toolbar select,
+.task-item__edit-title,
+.task-item__edit-date {
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  font: inherit;
+  color: inherit;
+}
+
+.task-form__input:focus,
+.toolbar input:focus,
+.toolbar select:focus,
+.task-item__edit-title:focus,
+.task-item__edit-date:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+  border-color: transparent;
+}
+
+.task-form__submit,
+.task-item__button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: var(--radius);
+  font: inherit;
+  cursor: pointer;
+}
+
+.task-form__submit {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.task-form__submit:hover {
+  background: var(--color-accent-dark);
+}
+
+
+.toolbar {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+
+/* Список задач */
+
+.task-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.task-list__empty {
+  margin: 0;
+  padding: 24px;
+  text-align: center;
+  color: var(--color-muted);
+  background: var(--color-surface);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius);
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.task-item--done {
+  border-color: var(--color-done);
+  background: #f2faf5;
+}
+
+.task-item--done .task-item__title {
+  text-decoration: line-through;
+  color: var(--color-muted);
+}
+
+.task-item--dragging {
+  opacity: 0.4;
+}
+
+.task-item__checkbox {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  accent-color: var(--color-done);
+  cursor: pointer;
+}
+
+.task-item__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.task-item__title {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.task-item__date {
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.task-item__controls {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.task-item__button {
+  padding: 7px 12px;
+  font-size: 13px;
+  background: #eef1f8;
+}
+
+.task-item__button:hover {
+  background: #e1e6f2;
+}
+
+.task-item__button--delete {
+  color: var(--color-danger);
+}
+
+.task-item__button--save {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.task-item__button--save:hover {
+  background: var(--color-accent-dark);
+}
+
+.task-item__edit-title,
+.task-item__edit-date {
+  border-radius: 8px;
+}
+
+.task-item__edit-title--invalid {
+  border-color: var(--color-danger);
+  outline: 1px solid var(--color-danger);
+}
+
+
+.page-footer {
+  padding-bottom: 24px;
+  text-align: center;
+  color: var(--color-muted);
+  font-size: 13px;
+}
+
+.page-footer__text {
+  margin: 0;
+}
+
+
+@media (max-width: 680px) {
+  .page-header__title {
+    font-size: 28px;
+  }
+
+  .task-form {
+    grid-template-columns: 1fr;
+  }
+
+  .toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .task-item {
+    flex-wrap: wrap;
+  }
+
+  .task-item__controls {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
