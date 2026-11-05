@@ -17,3 +17,9 @@ export function addTask(title, date) {
 export function deleteTask(id) {
   tasks = tasks.filter((item) => item.id !== id);
 }
+
+export function updateTask(id, changes) {
+  const task = tasks.find((item) => item.id === id);
+  if (!task) return;
+  Object.assign(task, changes);
+}

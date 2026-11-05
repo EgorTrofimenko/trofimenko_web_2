@@ -22,7 +22,7 @@ export function buildLayout() {
   const header = createElement('header', 'page-header');
   header.append(
     createElement('h1', 'page-header__title', 'To-Do List'),
-    createElement('p', 'page-header__subtitle', 'Планировщик задач на чистом JavaScript'),
+    createElement('p', 'page-header__subtitle', 'Планировщик задач на JavaScript'),
   );
 
   const main = createElement('main', 'page-main');
@@ -69,7 +69,7 @@ export function buildLayout() {
 
   const footer = createElement('footer', 'page-footer');
   footer.append(
-    createElement('p', 'page-footer__text', 'Лабораторная работа «Веб-программирование»: список задач на чистом JavaScript.'),
+    createElement('p', 'page-footer__text', 'Список задач на JavaScript.'),
   );
 
   document.body.append(header, main, footer);
