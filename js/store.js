@@ -13,3 +13,7 @@ export function addTask(title, date) {
         done: false,
     });
 }
+
+export function deleteTask(id) {
+  tasks = tasks.filter((item) => item.id !== id);
+}

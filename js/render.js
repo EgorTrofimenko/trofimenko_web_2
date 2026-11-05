@@ -1,6 +1,6 @@
 // Отрисовка списка задач.
 
-import { getTasks } from './store.js';
+import { getTasks, deleteTask } from './store.js';
 import { createElement } from './ui.js';
 
 export const viewState = {};
@@ -11,6 +11,7 @@ let emptyElement = null;
 export function initRender(list, empty) {
   listElement = list;
   emptyElement = empty;
+  registerListEvents();
 }
 
 export function render() {
@@ -31,7 +32,7 @@ function formatDate(value) {
 function createTaskItem(task) {
   const item = createElement('li', 'task-item');
   item.dataset.id = task.id;
-  item.append(createViewBlock(task));
+  item.append(createViewBlock(task), createControls());
   return item;
 }
 
@@ -42,4 +43,27 @@ function createViewBlock(task) {
     body.append(createElement('span', 'task-item__date', `Срок: ${formatDate(task.date)}`));
   }
   return body;
+}
+
+function createControls() {
+  const controls = createElement('div', 'task-item__controls');
+  const deleteButton = createElement('button', 'task-item__button task-item__button--delete', 'Удалить');
+  deleteButton.type = 'button';
+  deleteButton.dataset.action = 'delete';
+  controls.append(deleteButton);
+  return controls;
+}
+
+function registerListEvents() {
+  listElement.addEventListener('click', (event) => {
+    const button = event.target.closest('button[data-action]');
+    if (!button) return;
+    const item = event.target.closest('.task-item');
+    if (!item) return;
+
+    if (button.dataset.action === 'delete') {
+      deleteTask(item.dataset.id);
+      render();
+    }
+  });
 }
