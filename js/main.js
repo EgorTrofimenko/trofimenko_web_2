@@ -1,7 +1,7 @@
 // Точка входа: подключение ресурсов, сборка страницы и события.
 
 import { buildLayout } from './ui.js';
-import { addTask } from './store.js';
+import { addTask, loadTasks } from './store.js';
 import { initRender, render, viewState } from './render.js';
 
 function connectResources() {
@@ -18,6 +18,7 @@ function connectResources() {
 }
 
 connectResources();
+loadTasks();
 
 const ui = buildLayout();
 initRender(ui.list, ui.emptyMessage);
