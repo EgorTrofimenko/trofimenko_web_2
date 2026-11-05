@@ -34,10 +34,17 @@ function formatDate(value) {
 function createTaskItem(task) {
   const item = createElement('li', 'task-item');
   item.dataset.id = task.id;
+  const checkbox = document.createElement('input');
+  checkbox.type = 'checkbox';
+  checkbox.className = 'task-item__checkbox';
+  checkbox.checked = task.done;
+  checkbox.setAttribute('aria-label', 'Отметить выполнение задачи');
+
+  item.classList.toggle('task-item--done', task.done);
   if (viewState.editingId === task.id) {
-    item.append(createEditBlock(task));
+    item.append(checkbox, createEditBlock(task));
   } else {
-    item.append(createViewBlock(task), createControls());
+    item.append(checkbox, createViewBlock(task), createControls());
   }
   return item;
 }
@@ -89,6 +96,14 @@ function registerListEvents() {
       deleteTask(item.dataset.id);
       render();
     }
+  });
+
+  listElement.addEventListener('change', (event) => {
+    if (!event.target.classList.contains('task-item__checkbox')) return;
+    const item = event.target.closest('.task-item');
+    if (!item) return;
+    updateTask(item.dataset.id, { done: event.target.checked });
+    render();
   });
 }
 
