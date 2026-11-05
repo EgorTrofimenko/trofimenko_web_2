@@ -7,6 +7,7 @@ export const viewState = {
   editingId: null,
   sort: 'custom',
   filter: 'all',
+  search: '',
 };
 
 let listElement = null;
@@ -24,11 +25,24 @@ export function render() {
   for (const task of tasks) {
     listElement.append(createTaskItem(task));
   }
+  
+  emptyElement.textContent = getTasks().length
+    ? 'По заданным условиям ничего не найдено.'
+    : 'Задач пока нет — добавьте первую.';
   emptyElement.hidden = tasks.length > 0;
 }
 
 function getVisibleTasks() {
   let visible = [...getTasks()];
+
+  const query = viewState.search.trim().toLowerCase();
+  if (query) {
+    visible = visible.filter((task) => {
+      const inTitle = task.title.toLowerCase().includes(query);
+      const inDate = task.date && (task.date.includes(query) || formatDate(task.date).includes(query));
+      return inTitle || inDate;
+    });
+  }
 
   if (viewState.filter === 'active') {
     visible = visible.filter((task) => !task.done);

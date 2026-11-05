@@ -42,4 +42,9 @@ ui.filterSelect.addEventListener('change', () => {
   render();
 });
 
+ui.searchInput.addEventListener('input', () => {
+  viewState.search = ui.searchInput.value;
+  render();
+});
+
 render();
