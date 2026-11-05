@@ -40,3 +40,14 @@ export function updateTask(id, changes) {
   Object.assign(task, changes);
   saveTasks();
 }
+
+export function moveTask(draggedId, targetId, placeBefore) {
+  const fromIndex = tasks.findIndex((item) => item.id === draggedId);
+  if (fromIndex === -1) return;
+  const [moved] = tasks.splice(fromIndex, 1);
+  let toIndex = tasks.findIndex((item) => item.id === targetId);
+  if (toIndex === -1) return;
+  if (!placeBefore) toIndex += 1;
+  tasks.splice(toIndex, 0, moved);
+  saveTasks();
+}

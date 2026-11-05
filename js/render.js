@@ -1,6 +1,6 @@
 // Отрисовка списка задач.
 
-import { getTasks, deleteTask, updateTask } from './store.js';
+import { getTasks, deleteTask, updateTask, moveTask } from './store.js';
 import { createElement } from './ui.js';
 
 export const viewState = {
@@ -12,6 +12,7 @@ export const viewState = {
 
 let listElement = null;
 let emptyElement = null;
+let draggedId = null;
 
 export function initRender(list, empty) {
   listElement = list;
@@ -74,6 +75,7 @@ function formatDate(value) {
 function createTaskItem(task) {
   const item = createElement('li', 'task-item');
   item.dataset.id = task.id;
+  item.setAttribute('draggable', viewState.sort === 'custom' ? 'true' : 'false');
   const checkbox = document.createElement('input');
   checkbox.type = 'checkbox';
   checkbox.className = 'task-item__checkbox';
@@ -144,6 +146,44 @@ function registerListEvents() {
     if (!item) return;
     updateTask(item.dataset.id, { done: event.target.checked });
     render();
+  });
+
+  listElement.addEventListener('dragstart', (event) => {
+    if (viewState.sort !== 'custom') {
+      event.preventDefault();
+      return;
+    }
+
+    const item = event.target.closest('.task-item');
+    if (!item) return;
+    draggedId = item.dataset.id;
+    item.classList.add('task-item--dragging');
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('text/plain', draggedId);
+  });
+
+  listElement.addEventListener('dragover', (event) => {
+    if (draggedId) {
+      event.preventDefault();
+      event.dataTransfer.dropEffect = 'move';
+    }
+  });
+
+  listElement.addEventListener('drop', (event) => {
+    event.preventDefault();
+    const item = event.target.closest('.task-item');
+    if (!item || !draggedId || item.dataset.id === draggedId) return;
+    const rect = item.getBoundingClientRect();
+    const placeBefore = event.clientY < rect.top + rect.height / 2;
+    moveTask(draggedId, item.dataset.id, placeBefore);
+    draggedId = null;
+    render();
+  });
+
+  listElement.addEventListener('dragend', (event) => {
+    const item = event.target.closest('.task-item');
+    if (item) item.classList.remove('task-item--dragging');
+    draggedId = null;
   });
 }
 
