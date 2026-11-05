@@ -5,6 +5,8 @@ import { createElement } from './ui.js';
 
 export const viewState = {
   editingId: null,
+  sort: 'custom',
+  filter: 'all',
 };
 
 let listElement = null;
@@ -17,12 +19,36 @@ export function initRender(list, empty) {
 }
 
 export function render() {
-  const tasks = getTasks();
+  const tasks = getVisibleTasks();
   listElement.textContent = '';
   for (const task of tasks) {
     listElement.append(createTaskItem(task));
   }
   emptyElement.hidden = tasks.length > 0;
+}
+
+function getVisibleTasks() {
+  let visible = [...getTasks()];
+
+  if (viewState.filter === 'active') {
+    visible = visible.filter((task) => !task.done);
+  }
+  if (viewState.filter === 'done') {
+    visible = visible.filter((task) => task.done);
+  }
+
+  if (viewState.sort !== 'custom') {
+    const direction = viewState.sort === 'date-asc' ? 1 : -1;
+    visible.sort((a, b) => {
+      if (!a.date && !b.date) return 0;
+      if (!a.date) return 1;
+      if (!b.date) return -1;
+      if (a.date === b.date) return 0;
+      return (a.date < b.date ? -1 : 1) * direction;
+    });
+  }
+
+  return visible;
 }
 
 function formatDate(value) {

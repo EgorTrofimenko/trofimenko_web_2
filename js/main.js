@@ -2,7 +2,7 @@
 
 import { buildLayout } from './ui.js';
 import { addTask } from './store.js';
-import { initRender, render } from './render.js';
+import { initRender, render, viewState } from './render.js';
 
 function connectResources() {
   const styles = document.createElement('link');
@@ -29,6 +29,16 @@ ui.form.addEventListener('submit', (event) => {
   addTask(title, ui.dateInput.value);
   ui.form.reset();
   ui.titleInput.focus();
+  render();
+});
+
+ui.sortSelect.addEventListener('change', () => {
+  viewState.sort = ui.sortSelect.value;
+  render();
+});
+
+ui.filterSelect.addEventListener('change', () => {
+  viewState.filter = ui.filterSelect.value;
   render();
 });
 
