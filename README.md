@@ -44,3 +44,4 @@ python -m http.server 8000
 
 Трофименко Егор (K3360)
 
+https://egortrofimenko.github.io/trofimenko_web_2/
